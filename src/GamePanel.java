@@ -15,6 +15,13 @@ public class GamePanel extends JPanel implements KeyListener {
     int velocityY = 0;
     int gravity = 1;
     boolean onGround = false;
+
+    int goalX = 900;
+    int goalY = 250;
+    int goalWidth = 50;
+    int goalHeight = 50;
+    boolean gameWon = false;
+    boolean gameLost = false;
    
     ArrayList<Platform> platforms = new ArrayList<>();
     ArrayList<Enemy> enemies = new ArrayList<>();
@@ -31,6 +38,12 @@ public class GamePanel extends JPanel implements KeyListener {
         enemies.add(new Enemy(300, 400, 40, 40, 2, 200, 400)); 
         
         Timer timer = new Timer(16, e -> {
+
+            if (gameWon || gameLost) {
+                repaint();
+                return;
+            }
+
             playerY += velocityY;
             velocityY += gravity;
             onGround = false;
@@ -59,9 +72,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     enemy.update();
 
                     if (playerRect.intersects(enemy.getBounds())) {
-                        playerX = 350;
-                        playerY = 250;
-                        velocityY = 0;   
+                        gameLost = true;  
                     }
                 }
             }
@@ -77,6 +88,13 @@ public class GamePanel extends JPanel implements KeyListener {
             if (playerY + playerHeight > getHeight()) {
                 playerY = getHeight() - playerHeight;
             }
+
+            Rectangle goalRect = new Rectangle(goalX, goalY, goalWidth, goalHeight);
+
+            if (playerRect.intersects(goalRect)) {
+                gameWon = true;
+            }
+
             repaint();
         });
 
@@ -97,10 +115,30 @@ public class GamePanel extends JPanel implements KeyListener {
         for (Enemy enemy : enemies) {
             enemy.draw(g);
         }
+
+        g.setColor(Color.GREEN);
+        g.fillRect(goalX, goalY, goalWidth, goalHeight);
+
+        g.setColor(Color.WHITE);
+        if (gameWon) {
+            g.drawString("YOU WIN!", 50, 50);
+        }
+        if (gameLost) {
+            g.drawString("YOU LOSE! Press R to restart", 50, 50);
+        }
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
+
+        if (e.getKeyCode() == KeyEvent.VK_R) {
+            playerX = 350;
+            playerY = 250;
+            velocityY = 0;
+            gameWon = false;
+            gameLost = false;
+        }
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             playerX -= 10;
         }
