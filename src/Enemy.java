@@ -3,11 +3,11 @@ import java.awt.Graphics;
 
 public class Enemy extends GameObject
 {
-    private int speed;
+    private double speed;
     private int leftLimit;
     private int rightLimit;
-    
-    public Enemy(int x, int y, int width, int height, int speed, int leftLimit, int rightLimit)
+   
+    public Enemy(int x, int y, int width, int height, double speed, int leftLimit, int rightLimit)
     {
         super(x, y, width, height);
         this.speed = speed;
@@ -18,8 +18,8 @@ public class Enemy extends GameObject
     public void update()
     {
         x += speed;
-    
-        if (x <= leftLimit || x + width >= rightLimit)
+   
+        if (x <= leftLimit || x >= rightLimit - width)
         {
             speed = -speed;
         }

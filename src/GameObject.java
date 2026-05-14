@@ -1,7 +1,7 @@
 import java.awt.Graphics;
-import java.awt.Rectangle; 
+import java.awt.Rectangle;
 
-public class GameObject
+public abstract class GameObject
 {
 protected int x;
 protected int y;
@@ -25,7 +25,7 @@ public void draw(Graphics g)
 }
 public void update()
 {
-    
+   
 }
 
 }
